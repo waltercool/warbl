@@ -1319,7 +1319,7 @@ function sendFingeringSelect(row, selection) {
 	else if (selection == 6) {
 		key = 122;
 	} //NAF
-	else if (selection == 8) {
+	else if (selection == 8 || selection == 22) {
 		key = 125;
 	} //Recorder
 	else if (selection == 11) {
