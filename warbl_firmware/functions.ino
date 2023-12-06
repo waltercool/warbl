@@ -559,34 +559,34 @@ int get_note(unsigned int fingerPattern) {
 
 
 
-//Add up any transposition based on key and register.
+//Shift a quarter only
 void get_shift() {
-
-    shift = ((octaveShift * 12) + noteShift);  //adjust for key and octave shift.
-
+            
+    shift = ((octaveShift * 7) + noteShift);  //adjust for key and quarter shift.
+                
     if (newState == 3 && !(modeSelector[mode] == kModeEVI || (modeSelector[mode] == kModeSax && newNote < 62) || (modeSelector[mode] == kModeSaxBasic && newNote < 74) || (modeSelector[mode] == kModeRecorder && newNote < 76)) && !(newNote == 62 && (modeSelector[mode] == kModeUilleann || modeSelector[mode] == kModeUilleannStandard))) {  //if overblowing (except EVI, sax in the lower register, and low D with uilleann fingering, which can't overblow)
-        shift = shift + 12;                                                                                                                                                                                                                                                                                                                      //add a register jump to the transposition if overblowing.
-        if (modeSelector[mode] == kModeKaval) {                                                                                                                                                                                                                                                                                                  //Kaval only plays a fifth higher in the second register.
-            shift = shift - 5;
-        }
-    }
-
+        shift = shift + 7;                                                                                                                                                                                                                                                                                                                      //add a register jump to the transposition if overblowing.
+        if (modeSelector[mode] == kModeKaval) {                                                                                                                                                                                                                                                                                                  
+            shift = shift - 3;
+        }   
+    }       
+            
     if (breathMode == kPressureBell && modeSelector[mode] != kModeUilleann && modeSelector[mode] != kModeUilleannStandard) {  //if we're using the bell sensor to control register
         if (bitRead(holeCovered, 0) == switches[mode][INVERT]) {
-            shift = shift + 12;  //add a register jump to the transposition if necessary.
+            shift = shift + 7;  //add a register jump to the transposition if necessary.
             if (modeSelector[mode] == kModeKaval) {
-                shift = shift - 5;
+                shift = shift - 3;
             }
-        }
-    }
+        }   
+    }   
 
-    else if ((breathMode == kPressureThumb && (modeSelector[mode] == kModeWhistle || modeSelector[mode] == kModeChromatic || modeSelector[mode] == kModeNAF || modeSelector[mode] == kModeBansuriWARBL || modeSelector[mode] == kModeCustom)) || (breathMode == kPressureBreath && modeSelector[mode] == kModeCustom && switches[mode][THUMB_AND_OVERBLOW])) {  //if we're using the left thumb to control the regiser with a fingering patern that doesn't normally use the thumb
-
+    else if ((breathMode == kPressureThumb && (modeSelector[mode] == kModeWhistle || modeSelector[mode] == kModeChromatic || modeSelector[mode] == kModeNAF || modeSelector[mode] == kModeCustom)) || (breathMode == kPressureBreath && modeSelector[mode] == kModeCustom && switches[mode][THUMB_AND_OVERBLOW])) {  //if we're using the left thumb to control the regiser with a fingering patern that doesn't normally use the thumb
+                
         if (bitRead(holeCovered, 8) == switches[mode][INVERT]) {
-            shift = shift + 12;  //add an octave jump to the transposition if necessary.
-        }
-    }
-
+            shift = shift + 7;  //add an quarter jump to the transposition if necessary.
+        }       
+    }           
+                
     //Some charts require another transposition to bring them to the correct key
     if (modeSelector[mode] == kModeGaita || modeSelector[mode] == kModeGaitaExtended) {
         shift = shift - 1;
@@ -596,19 +596,7 @@ void get_shift() {
         shift = shift + 2;
     }
 
-    if (modeSelector[mode] == kModeBansuri || modeSelector[mode] == kModeBansuriWARBL) {
-        shift = shift - 5;
-    }
-
-
-
-
-    //  if ((holeCovered & 0b100000000) == 0 && (modeSelector[mode] == kModeWhistle || modeSelector[mode] == kModeChromatic) && newState == 3){ //with whistle, if we're overblowing and the thumb is uncovered, play the third octave.
-    // shift = shift + 12;
-    // }
 }
-
-
 
 
 
